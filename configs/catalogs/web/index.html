@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌏</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f3ec78, #af4261);
+            color: #fff;
+        }
+        #time {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .swal2-popup {
+            font-size: 1.2em !important;
+        }
+        .country-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div id="time">Loading...</div>    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <script>
+        const timezones = {
+            "Philippines": "Asia/Manila",
+            "USA (Eastern)": "America/New_York",
+            "USA (Central)": "America/Chicago",
+            "USA (Mountain)": "America/Denver",
+            "USA (Pacific)": "America/Los_Angeles",
+            "United Kingdom": "Europe/London",
+            "Japan": "Asia/Tokyo",
+            "Australia (Sydney)": "Australia/Sydney",
+            "India": "Asia/Kolkata",
+            "Germany": "Europe/Berlin",
+            "France": "Europe/Paris",
+            "China": "Asia/Shanghai",
+            "Russia (Moscow)": "Europe/Moscow",
+            "South Africa": "Africa/Johannesburg",
+            "Brazil": "America/Sao_Paulo",
+            "Mexico": "America/Mexico_City",
+            "Canada (Toronto)": "America/Toronto",
+            "Argentina": "America/Argentina/Buenos_Aires",
+            "Italy": "Europe/Rome",
+            "South Korea": "Asia/Seoul",
+            "New Zealand": "Pacific/Auckland"
+        };
+
+        function updateTime(timezone) {
+            setInterval(() => {
+                const now = new Date();
+                const options = { timeZone: timezone, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                const timeString = now.toLocaleTimeString('en-US', options);
+                document.getElementById('time').textContent = `Current time in ${timezone.replace(/_/g, ' ')}: ${timeString}`;
+            }, 1000);
+        }
+
+        function promptForCountry() {
+            Swal.fire({
+                title: 'Select a country to see the time',
+                input: 'select',
+                inputOptions: timezones,
+                inputPlaceholder: 'Select a country',
+                customClass: {
+                    input: 'country-select'
+                },
+                showCancelButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const selectedTimezone = timezones[result.value];
+                    updateTime(selectedTimezone);
+                } else {
+                    document.getElementById('time').textContent = 'No country selected.';
+                }
+            });
+        }
+
+        promptForCountry();
+    </script>
+</body>
+</html>

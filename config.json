@@ -1,0 +1,100 @@
+{
+  "author": "Ainz",
+  "username": "ainzdeveloper",
+  "key": "7937435f01ae82b2161d1621e9ca6e5f",
+  "version": "2.0.1",
+  "ports": "5000",
+  "approval": false,
+  "adminOnly": false,
+  "autoCreateDB": false,
+  "DeveloperMode": false,
+  "autoClean": true,
+  "autoCensor": false,
+  "autoRestart": {
+    "status": true,
+    "time": 20,
+    "type": "minutes",
+    "note": "to avoid problems, enable periodic bot restarts, set the status to false if you want to disable auto restart function."
+  },
+  "allowInbox": false,
+  "language": "tl",
+  "BOTOWNER": "Ber",
+  "BOTNAME": "Skibiditoilet",
+  "note": "make sure that the bot name is all lowercase",
+  "PREFIX": "+",
+  "OPERATOR": [
+    "100092359574131"
+  ],
+  "ADMINBOT": [
+    "100092359574131"
+  ],
+  "OWNERLINK": "",
+  "OWNERNAME": "",
+  "notifications": false,
+  "encryptSt": false,
+  "commandDisabled": [],
+  "eventDisabled": [],
+  "FB_CHAT_API_OPTIONS": {
+    "forceLogin": true,
+    "listenEvents": true,
+    "autoMarkDelivery": false,
+    "autoMarkRead": false,
+    "pauseLog": false,
+    "logLevel": "silent",
+    "selfListen": true,
+    "online": true,
+    "userAgent": "Dalvik/2.1.0 (Linux; U; Android 12; V2134 Build/SP1A.210812.003)"
+  },
+  "DATABASE": {
+    "sqlite": {
+      "storage": "../../database.sqlite"
+    }
+  },
+  "APPSTATEPATH": "../../facebookstate.json",
+  "DESIGN": {
+    "Title": "BEBU",
+    "Theme": "rainbow",
+    "Admin": "Aoi",
+    "Setup": {
+      "Info": "Design your own custom terminal Titlebar for the title and must contain no numbers",
+      "Theme": "Customize your console effortlessly with various theme colors. Explore Aqua, Fiery, Blue, Orange, Pink, Red, Retro, Sunlight, Teen, Summer, Flower, Ghost, Purple, Rainbow, and Hacker themes to enhance your terminal logs."
+    }
+  },
+  "LOGGER_SETTINGS": {
+    "note": "config the console output and loaders here!",
+    "console": {
+      "success": "bgGreenBright",
+      "error": "bgRedBright",
+      "warn": "bgYellowBright",
+      "available-letter-colors": "black, red, green, yellow, blue, magenta, cyan, white, blackBright, redBright, greenBright, yellowBright, blueBright, magentaBright, cyanBright, whiteBright",
+      "available-letter-bgcolors": "bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgWhite, bgBlackBright, bgRedBright, bgGreenBright, bgYellowBright, bgBlueBright, bgMagentaBright, bgCyanBright, bgWhiteBright",
+      "editNames": {
+        "success": "[ 𝚂𝚈𝚂𝚃𝙴𝙼 ]",
+        "error": "[ 𝙴𝚁𝚁𝙾𝚁 ]",
+        "warn": "[ 𝚆𝙰𝚁𝙽𝙸𝙽𝙶 ]"
+      }
+    },
+    "logger": {
+      "colors": {
+        "cmdLoader": "blue",
+        "evntLoader": "blue"
+      },
+      "strings": {
+        "cmdLoader": "[ 𝙲𝙾𝙼𝙼𝙰𝙽𝙳 ]",
+        "evntLoader": "[ 𝙴𝚅𝙴𝙽𝚃 ]"
+      }
+    }
+  },
+  "help": {
+    "autoUnsend": false,
+    "delayUnsend": 60
+  },
+  "play": {
+    "YOUTUBE_API": "AIzaSyCbuOQhSRjfdkLOXkhyEo3nzbUHvQRsgkk",
+    "SOUNDCLOUD_API": "M4TSyS6eV0AcMynXkA3qQASGcOFQTWub"
+  },
+  "logs": {
+    "enable": true
+  },
+  "maintenanceMode": true
+}
