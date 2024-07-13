@@ -24,7 +24,7 @@ app.listen(port, () => logger(`Your app is listening at http://localhost:${port}
 function startBot(message) {
   if (message) logger(message, "[ Starting ]");
 
-  const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "system.js"], {
+  const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "authentication.js"], {
     cwd: __dirname,
     stdio: "inherit",
     shell: true,
