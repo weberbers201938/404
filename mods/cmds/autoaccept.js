@@ -39,12 +39,11 @@ const greetings = [
 module.exports.config = {
   name: "autoaccept",
   version: "1.0.0",
-  permission: 2,
-  credits: "ryuko",
-  prefix: true,
-  premium: false,
+  hasPermssion: 2,
+  credits: "Berwin",
+  usePrefix: true,
   description: "automatically accept all friend requests",
-  category: "admin",
+  commandCategory: "admin",
   usages: "",
   cooldowns: 0
 };
