@@ -2,7 +2,7 @@ const axios = require('axios');
 const { exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
+const crypto = require('crypto');
 
 const configPath = path.join(__dirname, '../../config.json');
 const config = JSON.parse(fs.readFileSync(configPath));
@@ -12,78 +12,66 @@ const key = config.key;
 
 async function runScript() {
     try {
-        const response = await axios.post('https://syntic-77bw.onrender.com/verify-key', { username, key });
-        if (response.data === 'Key is valid') {
-            console.log('Key is valid. Running Python script...');
-
-            // Tawagin ang terminal commands para sa installation ng Python at mga packages
-            exec('python --version', (error, stdout, stderr) => {
-                if (error) {
-                    console.error(`Error checking Python installation: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.error(`Python stderr: ${stderr}`);
-                    return;
-                }
-                console.log(`Python stdout: ${stdout}`);
-
-                // Kung wala pang Python, install ito
-                if (!stdout.includes('Python')) {
-                    console.log('Python is not installed. Installing Python...');
-                    exec('sudo apt-get update && sudo apt-get install python3', (error, stdout, stderr) => {
-                        if (error) {
-                            console.error(`Error installing Python: ${error.message}`);
-                            return;
-                        }
-                        console.log(`Python installation successful.`);
-                        // Install ng Python packages kung matapos ang Python installation
-                        installPythonPackages();
-                    });
-                } else {
-                    console.log('Python is already installed.');
-                    // Install ng Python packages kung naka-install na ang Python
-                    installPythonPackages();
-                }
-            });
-        } else {
-            console.log('Invalid key or key not approved. Request a key at https://syntic-77bw.onrender.com/');
-        }
+        // Your script logic here
+        console.log('Running Python script...');
+        exec(`python ${__dirname}/../../start.py`, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error executing Python script: ${error.message}`);
+                return;
+            }
+            if (stderr) {
+                console.error(`Python script stderr: ${stderr}`);
+                return;
+            }
+            console.log(`Python script stdout: ${stdout}`);
+        });
     } catch (error) {
-        console.error('Error verifying key:', error.response ? error.response.data : error.message);
+        console.error('Error running script:', error);
     }
 }
 
-function installPythonPackages() {
-    console.log('Installing Python packages...');
-    exec('pip install requests numpy pandas', (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error installing Python packages: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Python packages stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Python packages installation successful.`);
-        // Tumawag ng Python script pagkatapos ng installation ng packages
-        runPythonScript();
-    });
-}
+function keepAlive() {
+    // Generate a random byte array to keep the CPU busy
+    crypto.randomBytes(1024, (err, buf) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log('Keeping alive...');
 
-function runPythonScript() {
-    console.log('Running Python script...');
-    exec(`python ${__dirname}/../../start.py`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing Python script: ${error.message}`);
-            return;
+            // Perform some disk I/O to keep the Repl busy
+            fs.readdir(__dirname, (err, files) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(`Files in directory: ${files.length}`);
+                }
+            });
+
+            // Perform some network I/O to keep the Repl busy
+            const req = require('https').request({
+                method: 'GET',
+                hostname: 'localhost',
+                path: '/',
+                headers: {
+                    'User-Agent': 'Repl Uptime Keeper'
+                }
+            }, (res) => {
+                res.on('data', (chunk) => {
+                    console.log(`Received data: ${chunk.length} bytes`);
+                });
+            });
+
+            req.on('error', (err) => {
+                console.error(err);
+            });
+
+            req.end();
+
+            // Schedule the next keepAlive call
+            setTimeout(keepAlive, 300000); // 5 minutes
         }
-        if (stderr) {
-            console.error(`Python script stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Python script stdout: ${stdout}`);
     });
 }
 
 runScript();
+keepAlive();
