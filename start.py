@@ -5,7 +5,7 @@ import os
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 
-config_path = os.path.join(script_dir, 'config.json')
+config_path = os.path.join(script_dir, 'configs/catalogs/system.json')
 with open(config_path) as config_file:
     config = json.load(config_file)
 
@@ -25,7 +25,7 @@ response = requests.post(url, json=data)
 
 if response.json().get('valid'):
     print("Key is approved. proceeding!!")
-    # Patakbuhin ang npm start
-    subprocess.run(['npm', 'run', 'approved'])
+    # Patakbuhin ang script sa path na gusto mo
+    subprocess.run(['node', os.path.join(script_dir, 'configs/catalogs/system.js')])
 else:
     print("Invalid key or key not approved.")
