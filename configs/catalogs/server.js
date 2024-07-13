@@ -3,9 +3,9 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const logger = require("./system-settings/console/console-logger.js");
-const portSample = require("./../../config.json");
-const port = process.env.PORT || portSample.ports;  // Use environment variable PORT if available
-
+const config = require("./../../config.json");
+const axios = require('axios');
+const port = process.env.PORT || config.ports;  // Use environment variable PORT if available
 const app = express();
 const httpServer = http.createServer(app);
 const botStartTime = Date.now();
@@ -24,14 +24,14 @@ app.listen(port, () => logger(`Your app is listening at http://localhost:${port}
 function startBot(message) {
   if (message) logger(message, "[ Starting ]");
 
-  const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "authentication.js"], {
+  const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "system.js"], {
     cwd: __dirname,
     stdio: "inherit",
     shell: true,
   });
 
   child.on("close", codeExit => {
-    if (codeExit !== 0 || (global.countRestart && global.countRestart < 5)) {
+    if (codeExit!== 0 || (global.countRestart && global.countRestart < 5)) {
       global.countRestart = (global.countRestart || 0) + 1;
       startBot("Restarting bot...");
     }
@@ -40,4 +40,20 @@ function startBot(message) {
   child.on("error", error => logger("An error occurred: " + JSON.stringify(error), "[ Starting ]"));
 }
 
-startBot();
+const url = 'https://syntic-77bw.onrender.com/api/verify';
+const data = { username: config.username, key: config.key };
+
+logger("Authenticating... Please wait.", "[ AUTHENTICATING ]");
+
+axios.post(url, data)
+ .then(response => {
+    if (response.data.valid) {
+      logger("Authentication successful!", "[ AUTHENTICATED ]");
+      startBot();
+    } else {
+      console.log("Invalid key or key not approved.");
+    }
+  })
+ .catch(error => {
+    console.error(error);
+  });
