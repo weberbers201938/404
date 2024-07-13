@@ -111,8 +111,9 @@ async function viewTopUsers(api, event, fonts, Users, Currencies) {
       const user = sortedUsers[i];
       const userInfo = await Users.getInfo(user.userID);
       const name = userInfo.name;
-      message += `${i + 1}. ${name}: ${user.money} coins\n`;
+      message += `**${i + 1}.** ${name} - **${user.money} coins**\n`;
     }
+    message += `━━━━━━━━━━━━━━━`;
     return api.sendMessage(message, event.threadID);
   } else {
     return api.sendMessage(`${header}\n${fonts.sans("No users found.")}`, event.threadID);
