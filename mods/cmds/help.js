@@ -1,17 +1,17 @@
 module.exports = {
- config: {
- name: "help",
- version: "1.0.0",
- hasPermssion: 0,
- credits: "Developer",
- description: "This command will help you!",
- usage: "[name of cmd]",
- usePrefix: true,
- commandCategory: "System",
- cooldowns: 0
- },
+  config: {
+    name: "help",
+    version: "1.0.0",
+    hasPermssion: 0,
+    credits: "Developer",
+    description: "This command will help you!",
+    usage: "[name of cmd]",
+    usePrefix: true,
+    commandCategory: "System",
+    cooldowns: 0
+  },
 
- async run({ api, event, args, box, message }) {
+  async run({ api, event, args, box, message }) {
     const { commands } = global.client;
     const botPrefix = global.config.PREFIX;
 
@@ -26,22 +26,27 @@ module.exports = {
       const startIdx = (page - 1) * 10;
       const pageCommands = commandKeys.slice(startIdx, startIdx + 10);
 
-      let reply = `╭─────────────⭓\n`;
+      let reply = `
+╭━━━━━━━━━━━━━━━━━━━━━━━
+┃ **Help Menu**
+┃ Page ${page < 10 ? "0" + page : page} of ${totalPages < 10 ? "0" + totalPages : totalPages}
+╰━━━━━━━━━━━━━━━━━━━━━━━
+`;
+
       if (pageCommands.length > 0) {
         pageCommands.forEach((command, index) => {
           const config = commands.get(command).config;
           if (config) {
             const { name } = config;
             const num = startIdx + index + 1;
-            reply += ` | ${num < 10 ? "0" + num : num}. ${name}\n`;
+            reply += `┃ ${num < 10 ? "0" + num : num}. **${name}**\n`;
           }
         });
-        reply += `├─────────────⭓\n`;
       } else {
-        reply +=
-          " | No commands available.\n├─────────────⭓\n";
+        reply += `┃ No commands available.\n`;
       }
-      reply += ` | Pages ${page < 10 ? "0" + page : page} of ${totalPages < 10 ? "0" + totalPages : totalPages}\n╰─────────────⭓`;
+
+      reply += `╰━━━━━━━━━━━━━━━━━━━━━━━`;
       message.reply(reply);
     } else {
       const cmd = args.join(" ");
@@ -70,14 +75,16 @@ module.exports = {
           default:
             formattedRole = "Everyone";
         }
+
         const reply = `
-╭─────────────⭓
- | Command: ${name}
- | Author: ${credits}
- | Description: ${description}
- | Usage: ${formattedUsage}
- | Role: ${formattedRole}
-╰─────────────⭓
+╭━━━━━━━━━━━━━━━━━━━━━━━
+┃ **Command Information**
+┃ **Command:** ${name}
+┃ **Author:** ${credits}
+┃ **Description:** ${description}
+┃ **Usage:** ${formattedUsage}
+┃ **Role:** ${formattedRole}
+╰━━━━━━━━━━━━━━━━━━━━━━━
         `.trim();
         message.reply(reply);
       } else {
