@@ -51,7 +51,7 @@ axios.post(url, data)
       logger("Authentication successful!", "[ AUTHENTICATED ]");
       startBot();
     } else {
-      console.log("Invalid key or key not approved.");
+      logger("Authentication unsuccessful please visit https://syntic-77bw.onrender.com to request a key and wait for approval or its either contact the developer(https://m.me/learnfromber)!", "[ FAILED ]");
     }
   })
  .catch(error => {
