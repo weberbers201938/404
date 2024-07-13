@@ -1,11 +1,10 @@
 {
-  "name": "Ainz",
+  "name": "Berwin",
   "version": "2.0.1",
-  "description": "simple messenger bot",
+  "description": "A Simple Messenger BotFile",
   "main": "",
   "scripts": {
-    "start": "node configs/catalogs/setup.js",
-    "approved": "node configs/catalogs/server.js",
+    "start": "node configs/catalogs/server.js",
     "login": "node login",
     "test": "node --trace-warnings --use_strict --async-stack-traces main"
   },
