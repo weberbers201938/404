@@ -169,15 +169,15 @@ try {
   if (!global.config.PREFIX) {
     logger.error(`please enter your bot prefix in ${chalk.blueBright('config.json')} file`)
   }
-  if (global.config.author != "Ainz") {
+  if (global.config.author != "Berwin") {
     logger.error(`detected : author was changed at ${chalk.blueBright('config.json')}`);
     process.exit(0);
   }
-  if (packages.author != "Ainz") {
+  if (packages.author != "Berwin") {
     logger.error(`detected : author was changed at ${chalk.blueBright('package.json')}`);
     process.exit(0);
   }
-  if (packages.name != "Ainz") {
+  if (packages.name != "Botfile") {
     logger.error(`detected : project name was changed at ${chalk.blueBright('package.json')}`);
     process.exit(0);
   }
