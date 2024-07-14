@@ -1,5 +1,5 @@
 {
-  "name": "Berwin",
+  "name": "Botfilr",
   "version": "2.0.1",
   "description": "A Simple Messenger BotFile",
   "main": "",
@@ -8,7 +8,7 @@
     "login": "node login",
     "test": "node --trace-warnings --use_strict --async-stack-traces main"
   },
-  "author": "Ainz",
+  "author": "Berwin",
   "license": "GPL-3.0",
   "dependencies": {
     "@xaviabot/fb-downloader": "^1.0.14",
