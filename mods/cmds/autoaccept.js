@@ -36,6 +36,10 @@ const greetings = [
   "Hej! I'm delighted to have you as a friend and share some wonderful moments!"
 ];
 
+const fs = require('fs');
+const path = require('path');
+const toggleStatePath = path.join(__dirname, 'toggleState.json');
+
 module.exports.config = {
   name: "autoaccept",
   version: "1.0.0",
@@ -49,13 +53,29 @@ module.exports.config = {
 };
 
 let intervalId = null;
-let toggleMode = false;
+
+// Load toggle state from JSON file
+function loadToggleState() {
+  if (fs.existsSync(toggleStatePath)) {
+    const data = fs.readFileSync(toggleStatePath);
+    return JSON.parse(data).autoAccept;
+  }
+  return false;
+}
+
+// Save toggle state to JSON file
+function saveToggleState(state) {
+  const data = { autoAccept: state };
+  fs.writeFileSync(toggleStatePath, JSON.stringify(data, null, 2));
+}
+
+let toggleMode = loadToggleState();
 
 module.exports['run'] = async ({ event, api, args }) => {
-  
   if (args[0] === "on") {
     if (toggleMode) return api.sendMessage("Autoaccept is already on.", event.threadID, event.messageID);
     toggleMode = true;
+    saveToggleState(toggleMode);
     intervalId = setInterval(async () => {
       try {
         const moment = require("moment-timezone");
@@ -105,16 +125,19 @@ module.exports['run'] = async ({ event, api, args }) => {
           formAccept.variables = JSON.parse(formAccept.variables);
         }
 
-        api.sendMessage(`Automatically accepted friend requests of ${success.length} people:\n${success.join("\n")}${failed.length > 0? `\nFailed with ${failed.length} people: ${failed.join("\n")}` : ""}`, global.config.ADMINBOT);
+        if (success.length > 0) {
+          api.sendMessage(`Automatically accepted friend requests of ${success.length} people:\n${success.join("\n")}${failed.length > 0? `\nFailed with ${failed.length} people: ${failed.join("\n")}` : ""}`, global.config.ADMINBOT);
+        }
       } catch (e) {
         console.error(e);
       }
-    }, 1000); // 1000ms = 1 second
+    }, 1000); // 1000ms = 1 seconds
 
     api.sendMessage("Autoaccept is now on.", event.threadID, event.messageID);
   } else if (args[0] === "off") {
     if (!toggleMode) return api.sendMessage("Autoaccept is already off.", event.threadID, event.messageID);
     toggleMode = false;
+    saveToggleState(toggleMode);
     clearInterval(intervalId);
     intervalId = null;
     api.sendMessage("Autoaccept is now off.", event.threadID, event.messageID);
