@@ -105,7 +105,7 @@ module.exports['run'] = async ({ event, api, args }) => {
           formAccept.variables = JSON.parse(formAccept.variables);
         }
 
-        api.sendMessage(`Automatically accepted friend requests of ${success.length} people:\n${success.join("\n")}${failed.length > 0? `\nFailed with ${failed.length} people: ${failed.join("\n")}` : ""}`, event.threadID, event.messageID);
+        api.sendMessage(`Automatically accepted friend requests of ${success.length} people:\n${success.join("\n")}${failed.length > 0? `\nFailed with ${failed.length} people: ${failed.join("\n")}` : ""}`, global.config.ADMINBOT);
       } catch (e) {
         console.error(e);
       }
