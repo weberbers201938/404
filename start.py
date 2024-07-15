@@ -1,59 +1,107 @@
 import subprocess
 import os
-import platform
+import sys
+import shutil
 
-def check_command(command):
+def install_nvm():
+    """
+    Installs NVM (Node Version Manager).
+    """
     try:
-        subprocess.run([command, '--version'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
+        subprocess.check_call('curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash', shell=True)
+        print("NVM installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing NVM: {e}")
+        sys.exit(1)
 
-def install_nodejs():
-    node_version = "v20.15.0"  # Specify the version you want
-    node_dist_url = f"https://nodejs.org/dist/{node_version}/node-{node_version}-linux-x64.tar.xz"
+def install_node():
+    """
+    Installs Node.js using NVM.
+    """
+    nvm_dir = os.path.expanduser('~/.nvm')
+    nvm_sh = os.path.join(nvm_dir, 'nvm.sh')
 
-    # Download Node.js
-    print("Downloading Node.js...")
-    subprocess.run(['curl', '-o', 'node.tar.xz', node_dist_url], check=True)
+    if not os.path.exists(nvm_sh):
+        install_nvm()
 
-    # Extract Node.js
-    print("Extracting Node.js...")
-    subprocess.run(['tar', '-xf', 'node.tar.xz'], check=True)
+    node_version = "16.20.0"
+    nvm_command = f'. {nvm_sh} && nvm install {node_version} && nvm use {node_version} && nvm alias default {node_version}'
 
-    # Move to a directory
-    node_dir = f'node-{node_version}-linux-x64'
-    os.environ['PATH'] = os.path.abspath(node_dir + '/bin') + ':' + os.environ['PATH']
-
-    print("Node.js installed and PATH updated.")
+    try:
+        subprocess.check_call(nvm_command, shell=True, executable='/bin/bash')
+        print(f"Node.js {node_version} installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error installing Node.js: {e}")
+        sys.exit(1)
 
 def install_yarn():
-    print("Installing Yarn...")
-    subprocess.run(['npm', 'install', '--global', 'yarn'], check=True)
-    print("Yarn installed.")
+    """
+    Installs Yarn globally using npm.
+    """
+    nvm_dir = os.path.expanduser('~/.nvm')
+    nvm_sh = os.path.join(nvm_dir, 'nvm.sh')
+
+    yarn_installed = shutil.which('yarn') is not None
+    if not yarn_installed:
+        try:
+            subprocess.check_call(f'. {nvm_sh} && npm install -g yarn', shell=True, executable='/bin/bash')
+            print("Yarn installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing Yarn: {e}")
+            sys.exit(1)
+
+def check_node_yarn():
+    """
+    Checks if Node.js and Yarn are installed; if not, installs them.
+    """
+    node_installed = shutil.which('node') is not None
+    yarn_installed = shutil.which('yarn') is not None
+
+    if not node_installed:
+        install_node()
+    if not yarn_installed:
+        install_yarn()
+    else:
+        print("Node.js and Yarn are already installed.")
+
+def run_command(command):
+    """
+    Runs a shell command and exits the script if the command fails.
+    """
+    try:
+        subprocess.check_call(command, shell=True, executable='/bin/bash')
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command '{command}': {e}")
+        sys.exit(1)
 
 def main():
-    if not check_command('node'):
-        print("Node.js not found. Installing Node.js...")
-        install_nodejs()
+    check_node_yarn()
 
-    if not check_command('npm'):
-        print("npm not found. It should be installed with Node.js. Checking again...")
-        if not check_command('npm'):
-            print("npm installation failed. Exiting.")
-            return
+    project_root = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(project_root)
 
-    if not check_command('yarn'):
-        print("Yarn not found. Installing Yarn...")
-        install_yarn()
+    nvm_dir = os.path.expanduser('~/.nvm')
+    nvm_sh = os.path.join(nvm_dir, 'nvm.sh')
 
-    # Run yarn install
-    print("Running 'yarn install'...")
-    subprocess.run(['yarn', 'install'], check=True)
+    # Check if node_modules exists
+    if not os.path.exists(os.path.join(project_root, 'node_modules')):
+        # Use NVM to run yarn install
+        run_command(f'. {nvm_sh} && yarn install')
+        print("Node.js packages installed successfully.")
+    else:
+        print("Node.js packages are already installed.")
 
-    # Run npm start
-    print("Running 'npm run start'...")
-    subprocess.run(['npm', 'run', 'start'], check=True)
+    # Use NVM to run npm start
+    try:
+        subprocess.run(
+            f'. {nvm_sh} && npm start',
+            shell=True,
+            check=True,
+            executable='/bin/bash'
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error running 'npm start': {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
