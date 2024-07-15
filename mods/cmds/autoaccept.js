@@ -51,8 +51,9 @@ module.exports.config = {
 let intervalId = null;
 let toggleMode = false;
 
-module.exports.run = async ({ event, api }) => {
-  if (event.body === "on") {
+module.exports['run'] = async ({ event, api, args }) => {
+  
+  if (args[0] === "on") {
     if (toggleMode) return api.sendMessage("Autoaccept is already on.", event.threadID, event.messageID);
     toggleMode = true;
     intervalId = setInterval(async () => {
@@ -111,7 +112,7 @@ module.exports.run = async ({ event, api }) => {
     }, 1000); // 1000ms = 1 second
 
     api.sendMessage("Autoaccept is now on.", event.threadID, event.messageID);
-  } else if (event.body === "off") {
+  } else if (args[0] === "off") {
     if (!toggleMode) return api.sendMessage("Autoaccept is already off.", event.threadID, event.messageID);
     toggleMode = false;
     clearInterval(intervalId);
