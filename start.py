@@ -24,7 +24,7 @@ def install_node():
     if not os.path.exists(nvm_sh):
         install_nvm()
 
-    node_version = "16.20.0"
+    node_version = "20.15.0"
     nvm_command = f'. {nvm_sh} && nvm install {node_version} && nvm use {node_version} && nvm alias default {node_version}'
 
     try:
