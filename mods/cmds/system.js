@@ -15,10 +15,11 @@ module.exports.config = {
   cooldowns: 0
 };
 
-module.exports.run = async function({ args, box, fonts, message}) {
+module.exports.run = async function({ args, box, fonts, message }) {
   const system = `⚙️ | ${fonts.bold("System")}
 ━━━━━━━━━━━━━━━`;
   const utils = global.loader;
+
   async function handleLoad() {
     const i = await box.reply(`${system}
 ⚙️ | ${fonts.sans("Getting started..")}`);
@@ -26,7 +27,7 @@ module.exports.run = async function({ args, box, fonts, message}) {
     await box.edit(
       `${system}
 🔃 | ${fonts.sans("Reloading the latest edited codes.")}`,
-      i.messageID,
+      i.messageID
     );
     const errs = await utils.loadAll();
 
@@ -47,19 +48,19 @@ module.exports.run = async function({ args, box, fonts, message}) {
     await box.edit(
       `${system}
 📥 | ${fonts.sans("Updating the system..")}`,
-      i.messageID,
+      i.messageID
     );
     await new Promise((r) => setTimeout(r, 1000));
     await box.edit(
       `${system}
 📥 | ${fonts.sans("Almost there...")}`,
-      i.messageID,
+      i.messageID
     );
     await new Promise((r) => setTimeout(r, 1000));
     await box.edit(
       `${system}
 🟢 | ${fonts.sans("Loaded all modules!")}`,
-      i.messageID,
+      i.messageID
     );
     return true;
   }
@@ -75,7 +76,7 @@ module.exports.run = async function({ args, box, fonts, message}) {
     if (fs.existsSync(filePath)) {
       await message.waitForReaction(
         `⚠️ ${fonts.sans(`The file ${fileName} already exists, please react with any emoji to proceed, this will replace the file and this action cannot be undone.`)}`,
-        `✅ ${fonts.sans("Proceeding...")}`,
+        `✅ ${fonts.sans("Proceeding...")}`
       );
     }
 
@@ -87,7 +88,7 @@ module.exports.run = async function({ args, box, fonts, message}) {
         code = response.data;
       } catch (err) {
         await box.reply(
-          `❌ | Failed to download the file from the given URL.`,
+          `❌ | Failed to download the file from the given URL.`
         );
         return false;
       }
@@ -115,7 +116,7 @@ module.exports.run = async function({ args, box, fonts, message}) {
     }
     const reaction = await message.waitForReaction(
       `⚠️ Are you sure you want to delete ${fileName}? You cannot undo this action.\nPlease react to this message to confirm!`,
-      `✅ Proceeding to deletion...`,
+      `✅ Proceeding to deletion...`
     );
     if (!reaction) return false; // User didn't confirm
     fs.unlinkSync(filePath);
@@ -139,14 +140,14 @@ module.exports.run = async function({ args, box, fonts, message}) {
     });
     if (!url) {
       await box.reply(
-        `❌ | Failed to upload the file to pastebin, please check if the API key is working.`,
+        `❌ | Failed to upload the file to pastebin, please check if the API key is working.`
       );
       return false;
     }
     const id = url.split("/")[3];
     const rawPaste = "https://pastebin.com/raw/" + id;
     await box.reply(
-      `✅ | Successfully uploaded ${fileName} to pastebin!\nUrl: ${rawPaste}`,
+      `✅ | Successfully uploaded ${fileName} to pastebin!\nUrl: ${rawPaste}`
     );
   } else {
     await box.reply(`${system}
