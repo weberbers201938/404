@@ -15,8 +15,7 @@ module.exports = {
 
   async run({ api, event, args, fonts, Users, Currencies }) {
     const { threadID, senderID } = event;
-    const header = `${fonts.bold('Bank')} 🏦 
-━━━━━━━━━━━━━━━`;
+    const header = `${fonts.bold('Bank')} 🏦\n━━━━━━━━━━━━━━━`;
     const subCommand = args[0];
 
     switch (subCommand) {
@@ -56,9 +55,11 @@ module.exports = {
   }
 };
 
+// File paths
 const dailyClaimsFile = "dailyClaims.json";
 const investmentsFile = "investments.json";
 
+// Helper functions to read/write JSON data
 function getDailyClaimsData() {
   if (!fs.existsSync(dailyClaimsFile)) {
     fs.writeFileSync(dailyClaimsFile, JSON.stringify({ claims: [] }));
@@ -81,28 +82,28 @@ function saveInvestmentsData(data) {
   fs.writeFileSync(investmentsFile, JSON.stringify(data, null, 2));
 }
 
+// Check if the user is registered
 async function checkUserRegistration(api, event, fonts, Users, Currencies, threadID, senderID, callback, ...args) {
   const user = await Currencies.getData(senderID);
   if (user && user.money !== undefined) {
     return callback(api, event, fonts, Users, Currencies, threadID, senderID, ...args);
   } else {
-    const header = `${fonts.bold('Bank')} 🏦 
-━━━━━━━━━━━━━━━`;
+    const header = `${fonts.bold('Bank')} 🏦\n━━━━━━━━━━━━━━━`;
     return api.sendMessage(`${header}\n${fonts.sans("You are not registered. Use 'bank register' to register.")}`, threadID);
   }
 }
 
+// Check balance command
 async function checkBalance(api, event, fonts, Users, Currencies, threadID, senderID) {
-  const header = `${fonts.bold('Balance')} 💰 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Balance')} 💰\n━━━━━━━━━━━━━━━`;
   const user = await Currencies.getData(senderID);
   const balance = user.money;
   return api.sendMessage(`${header}\n${fonts.sans(`Your current balance is ${balance} coins.`)}`, threadID);
 }
 
+// View top users command
 async function viewTopUsers(api, event, fonts, Users, Currencies) {
-  const header = `${fonts.bold('Top Users')} 🏆 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Top Users')} 🏆\n━━━━━━━━━━━━━━━`;
   const allUsers = await Currencies.getAll(["userID", "money"]);
   if (allUsers.length > 0) {
     const sortedUsers = allUsers.sort((a, b) => b.money - a.money).slice(0, 10);
@@ -120,9 +121,9 @@ async function viewTopUsers(api, event, fonts, Users, Currencies) {
   }
 }
 
+// Start crypto investment command
 async function startCrypto(api, event, fonts, Users, Currencies, threadID, senderID, amount) {
-  const header = `${fonts.bold('Crypto')} 📈 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Crypto')} 📈\n━━━━━━━━━━━━━━━`;
   amount = parseInt(amount);
   if (!amount || isNaN(amount) || amount <= 0) {
     return api.sendMessage(`${header}\n${fonts.sans("Invalid amount. Please enter a positive amount to invest.")}`, threadID);
@@ -131,10 +132,10 @@ async function startCrypto(api, event, fonts, Users, Currencies, threadID, sende
   if (!user || user.money < amount) {
     return api.sendMessage(`${header}\n${fonts.sans("You don't have enough money to invest.")}`, threadID);
   }
-  
+
   const updatedMoney = user.money - amount;
   const currentTime = Date.now();
-  
+
   // Save investment details
   const investmentsData = getInvestmentsData();
   investmentsData.investments.push({ userID: senderID, amount, investedAt: currentTime, active: true });
@@ -145,10 +146,10 @@ async function startCrypto(api, event, fonts, Users, Currencies, threadID, sende
   return api.sendMessage(`${header}\n${fonts.sans(`Your investment of ${amount} coins has been successful. It will double every minute.`)}`, threadID);
 }
 
+// Stop crypto investment command
 async function stopCrypto(api, event, fonts, Users, Currencies, threadID, senderID) {
-  const header = `${fonts.bold('Crypto')} 📉 
-━━━━━━━━━━━━━━━`;
-  
+  const header = `${fonts.bold('Crypto')} 📉\n━━━━━━━━━━━━━━━`;
+
   // Stop the investment
   const investmentsData = getInvestmentsData();
   const investment = investmentsData.investments.find(inv => inv.userID === senderID && inv.active);
@@ -161,9 +162,9 @@ async function stopCrypto(api, event, fonts, Users, Currencies, threadID, sender
   }
 }
 
+// Continue crypto investment command
 async function continueCrypto(api, event, fonts, Users, Currencies, threadID, senderID) {
-  const header = `${fonts.bold('Crypto')} 📈 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Crypto')} 📈\n━━━━━━━━━━━━━━━`;
 
   // Continue the investment
   const investmentsData = getInvestmentsData();
@@ -177,9 +178,9 @@ async function continueCrypto(api, event, fonts, Users, Currencies, threadID, se
   }
 }
 
+// Transfer money command
 async function transferMoney(api, event, fonts, Users, Currencies, threadID, senderID, targetID, amount) {
-  const header = `${fonts.bold('Transfer')} 💸 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Transfer')} 💸\n━━━━━━━━━━━━━━━`;
   amount = parseInt(amount);
   if (!amount || isNaN(amount) || amount <= 0) {
     return api.sendMessage(`${header}\n${fonts.sans("Invalid amount. Please enter a positive amount to transfer.")}`, threadID);
@@ -196,9 +197,9 @@ async function transferMoney(api, event, fonts, Users, Currencies, threadID, sen
   return api.sendMessage(`${header}\n${fonts.sans(`Successfully transferred ${amount} coins to the target user.`)}`, threadID);
 }
 
+// Register command
 async function bankRegister(api, event, fonts, Users, Currencies, threadID, senderID) {
-  const header = `${fonts.bold('Register')} ✍️ 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Register')} ✍️\n━━━━━━━━━━━━━━━`;
   const user = await Currencies.getData(senderID);
   if (user && user.money !== undefined) {
     return api.sendMessage(`${header}\n${fonts.sans("You are already registered.")}`, threadID);
@@ -212,9 +213,9 @@ async function bankRegister(api, event, fonts, Users, Currencies, threadID, send
   return api.sendMessage(`${header}\n${fonts.sans("You have successfully registered and received 10,000 coins!")}`, threadID);
 }
 
+// Daily claim command
 async function dailyClaim(api, event, fonts, Users, Currencies, threadID, senderID) {
-  const header = `${fonts.bold('Daily Claim')} 🎁 
-━━━━━━━━━━━━━━━`;
+  const header = `${fonts.bold('Daily Claim')} 🎁\n━━━━━━━━━━━━━━━`;
   const dailyClaimsData = getDailyClaimsData();
   const claimRecord = dailyClaimsData.claims.find(claim => claim.userID === senderID);
   const currentTime = Date.now();
