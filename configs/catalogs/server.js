@@ -40,12 +40,11 @@ function startBot(message) {
   child.on("error", error => logger("An error occurred: " + JSON.stringify(error), "[ Starting ]"));
 }
 
-const url = 'https://syntic-77bw.onrender.com/api/verify';
 const data = { username: config.username, key: config.key };
 
 logger("Authenticating... Please wait.", "[ AUTHENTICATING ]");
 
-axios.post(url, data)
+axios.post(global.api.approval+'/api/verify', data)
  .then(response => {
     if (response.data.valid) {
       logger("Authentication successful!", "[ AUTHENTICATED ]");
