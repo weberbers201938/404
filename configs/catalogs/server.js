@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const logger = require("./system-settings/console/console-logger.js");
 const config = require("./../../config.json");
+const api = require("./apis/api.json");
 const axios = require('axios');
 const port = process.env.PORT || config.ports;  // Use environment variable PORT if available
 const app = express();
@@ -44,7 +45,7 @@ const data = { username: config.username, key: config.key };
 
 logger("Authenticating... Please wait.", "[ AUTHENTICATING ]");
 
-axios.post(global.api.approval+'/api/verify', data)
+axios.post(`${api.approval}/api/verify`, data)
  .then(response => {
     if (response.data.valid) {
       logger("Authentication successful!", "[ AUTHENTICATED ]");
