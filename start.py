@@ -91,7 +91,7 @@ def main():
     else:
         print("Node.js packages are already installed.")
 
-    # Use NVM to run npm start
+    # Try to use NVM to run npm start, fallback if it fails
     try:
         subprocess.run(
             f'. {nvm_sh} && npm start',
@@ -100,8 +100,18 @@ def main():
             executable='/bin/bash'
         )
     except subprocess.CalledProcessError as e:
-        print(f"Error running 'npm start': {e}")
-        sys.exit(1)
+        print(f"Error running 'npm start' with NVM: {e}")
+        print("Attempting to run 'npm start' without NVM.")
+        try:
+            subprocess.run(
+                'npm start',
+                shell=True,
+                check=True,
+                executable='/bin/bash'
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error running 'npm start' without NVM: {e}")
+            sys.exit(1)
 
 if __name__ == "__main__":
     main()
