@@ -28,8 +28,8 @@ module.exports = {
 
       let reply = `
 ╭━━━━━━━━━━━━━━━━━━━━━━━╮
-┃          🌟 ${fonts.sans("Help Menu")} 🌟          ┃
-┃          Page ${fonts.sans(page < 10 ? "0" + page : page)} of ${fonts.sans(totalPages < 10 ? "0" + totalPages : totalPages)}          ┃
+┃          🌟 Help Menu 🌟          ┃
+┃          Page ${page < 10 ? "0" + page : page} of ${totalPages < 10 ? "0" + totalPages : totalPages}          ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
 `;
 
@@ -39,11 +39,11 @@ module.exports = {
           if (config) {
             const { name, description } = config;
             const num = startIdx + index + 1;
-            reply += `┃ ${fonts.sans(num < 10 ? "0" + num : num)}. ${fonts.sans(name)} - ${fonts.sans(description)}\n`;
+            reply += `┃ ${num < 10 ? "0" + num : num}. ${name} - ${description}\n`;
           }
         });
       } else {
-        reply += `┃ ${fonts.sans("No commands available.")}\n`;
+        reply += `┃ No commands available.\n`;
       }
 
       reply += `╰━━━━━━━━━━━━━━━━━━━━━━━╯`;
@@ -76,12 +76,12 @@ module.exports = {
 
         const reply = `
 ╭━━━━━━━━━━━━━━━━━━━━━━━╮
-┃ ${fonts.sans("Command Information")}          ┃
-┃ ${fonts.sans("Command:")} ${fonts.sans(name)}        ┃
-┃ ${fonts.sans("Author:")} ${fonts.sans(credits)}         ┃
-┃ ${fonts.sans("Description:")} ${fonts.sans(description)}       ┃
-┃ ${fonts.sans("Usage:")} ${fonts.sans(formattedUsage)}      ┃
-┃ ${fonts.sans("Role:")} ${fonts.sans(formattedRole)}         ┃
+┃ Command Information          ┃
+┃ Command: ${name}        ┃
+┃ Author: ${credits}         ┃
+┃ Description: ${description}       ┃
+┃ Usage: ${formattedUsage}      ┃
+┃ Role: ${formattedRole}         ┃
 ╰━━━━━━━━━━━━━━━━━━━━━━━╯
         `.trim();
         message.reply(reply);
