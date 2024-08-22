@@ -6,12 +6,12 @@
   "ports": "5000",
   "approval": false,
   "adminOnly": false,
-  "autoCreateDB": false,
+  "autoCreateDB": true,
   "DeveloperMode": false,
   "autoClean": true,
   "autoCensor": false,
   "autoRestart": {
-    "status": true,
+    "status": false,
     "time": 20,
     "type": "minutes",
     "note": "to avoid problems, enable periodic bot restarts, set the status to false if you want to disable auto restart function."
