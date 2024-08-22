@@ -3,8 +3,8 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const logger = require("./system-settings/console/console-logger.js");
-const config = require("./../../config.json");
-const api = require("./apis/api.json");
+//const config = require("./../../config.json");
+//const api = require("./apis/api.json");
 const axios = require('axios');
 const port = process.env.PORT || config.ports;  // Use environment variable PORT if available
 const app = express();
@@ -41,9 +41,9 @@ function startBot(message) {
   child.on("error", error => logger("An error occurred: " + JSON.stringify(error), "[ Starting ]"));
 }
 
-const data = { username: config.username, key: config.key };
+//const data = { username: config.username, key: config.key };
 
-logger("Authenticating... Please wait.", "[ AUTHENTICATING ]");
+/* logger("Authenticating... Please wait.", "[ AUTHENTICATING ]");
 
 axios.post(`${api.approval}/api/verify`, data)
  .then(response => {
@@ -57,3 +57,4 @@ axios.post(`${api.approval}/api/verify`, data)
  .catch(error => {
     console.error(error);
   });
+*/ 
