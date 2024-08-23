@@ -9,7 +9,8 @@ const http = require("http");
 const express = require("express");
 const axios = require('axios');
 const logger = require("./system-settings/console/console-logger.js");
-
+const config = require("./../../config.json");
+//const api = require("./apis/api.json");
 const screenshotPath = path.join(__dirname, 'screenshot.jpg');
 const port = process.env.PORT || config.ports;  // Use environment variable PORT if available
 const currentUrl = `https://replit.com/@${process.env.REPL_OWNER}/${process.env.REPL_SLUG}`;
