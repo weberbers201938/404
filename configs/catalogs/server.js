@@ -62,6 +62,7 @@ async function run() {
       await page.screenshot({ path: screenshotPath, type: 'jpeg' });
 
       console.log('Browser is running. Press Ctrl+C to exit.');
+      startBot();
     });
   });
 }
@@ -117,4 +118,3 @@ axios.post(`${api.approval}/api/verify`, data)
 */
 
 run();
-startBot();
