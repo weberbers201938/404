@@ -49,7 +49,7 @@ async function run() {
       page = await browser.newPage();
       await page.setUserAgent("Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_7; en-us) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Safari/530.17");
 
-      const cookies = JSON.parse(fs.readFileSync('cookies.json', 'utf8'));
+      const cookies = JSON.parse(fs.readFileSync('replit.json', 'utf8'));
       await page.setCookie(...cookies);
 
       await page.goto(currentUrl, { waitUntil: 'networkidle2' });
