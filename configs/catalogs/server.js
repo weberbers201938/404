@@ -17,24 +17,27 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => logger(`Your app is listening at http://localhost:${port}`, "[ ONLINE ]"));
 
-function startBot(message) {
-  if (message) logger(message, "[ Starting ]");
+function startBotProcess(script) {
+    const child = spawn("node", ["--trace-warnings", "--async-stack-traces", script], {
+        cwd: __dirname,
+        stdio: "inherit",
+        shell: true
+    });
 
-  const child = spawn("node", ["--trace-warnings", "--async-stack-traces", "system.js"], {
-    cwd: __dirname,
-    stdio: "inherit",
-    shell: true,
-  });
+    child.on("close", (codeExit) => {
+        console.log(`${script} process exited with code: ${codeExit}`);
+        if (codeExit !== 0) {
+            setTimeout(() => startBotProcess(script), 3000);
+        }
+    });
 
-  child.on("close", codeExit => {
-    if (codeExit!== 0 || (global.countRestart && global.countRestart < 5)) {
-      global.countRestart = (global.countRestart || 0) + 1;
-      startBot("Restarting bot...");
-    }
-  });
-
-  child.on("error", error => logger("An error occurred: " + JSON.stringify(error), "[ Starting ]"));
+    child.on("error", (error) => {
+        console.error(`An error occurred starting the ${script} process: ${error}`);
+    });
 }
+
+startBotProcess("system.js");
+startBotProcess("monitor.js");
 
 //const data = { username: config.username, key: config.key };
 
@@ -53,4 +56,3 @@ axios.post(`${api.approval}/api/verify`, data)
     console.error(error);
   });
 */ 
-startBot();
