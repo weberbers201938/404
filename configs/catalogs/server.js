@@ -11,11 +11,6 @@ const app = express();
 const httpServer = http.createServer(app);
 const botStartTime = Date.now();
 
-app.get("/dash", (req, res) => {
-  const uptime = Date.now() - botStartTime;
-  res.json({ uptime });
-});
-
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, '/web/index.html'));
 });
@@ -58,3 +53,4 @@ axios.post(`${api.approval}/api/verify`, data)
     console.error(error);
   });
 */ 
+startBot();
