@@ -3,7 +3,7 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const logger = require("./system-settings/console/console-logger.js");
-//const config = require("./../../config.json");
+const config = require("./../../config.json");
 //const api = require("./apis/api.json");
 const axios = require('axios');
 const port = process.env.PORT || config.ports;  // Use environment variable PORT if available
@@ -37,7 +37,7 @@ function startBotProcess(script) {
 }
 
 startBotProcess("system.js");
-startBotProcess("monitor.js");
+//startBotProcess("monitor.js");
 
 //const data = { username: config.username, key: config.key };
 
