@@ -21,7 +21,7 @@
 	"Websocket_Extension": {
 		"Status": false,
 		"ResetData": false,
-		"AppState_Path": "appstate.json"
+		"AppState_Path": "facebookstate.json"
 	},
 	"HTML": {
 		"HTML": false,
