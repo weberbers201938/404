@@ -3,7 +3,7 @@
   "username": "ber",
   "key": "e5643237273abaa236687ebb48fa415f",
   "version": "2.0.1",
-  "ports": "6053",
+  "ports": "6074",
   "approval": false,
   "adminOnly": false,
   "autoCreateDB": true,
